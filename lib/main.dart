@@ -88,9 +88,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("change text"),
-        ),
-        body: Center(child: _bodyWidget()));
+      appBar: AppBar(
+        title: const Text("change text"),
+      ),
+      body: _bodyWidget(),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.edit),
+        onPressed: () {
+          changetext();
+        },
+      ),
+    );
   }
 }
