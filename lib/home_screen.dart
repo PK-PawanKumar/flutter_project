@@ -15,11 +15,17 @@ class _HomePageState extends State<HomePage> {
   final deadline = [];
   final alarmcolor = [];
   final CheckboxStatus = [];
+
   final messagecontroller = TextEditingController();
   final message3controller = TextEditingController();
   final datecontroller = TextEditingController();
+  final messagecontroller2 = TextEditingController();
+  final message3controller2 = TextEditingController();
+  final datecontroller2 = TextEditingController();
   // ignore: prefer_final_fields
   var _iconColor = Colors.red;
+  bool focus = false;
+  bool enableEdit = false;
 
   @override
   void initState() {
@@ -46,6 +52,25 @@ class _HomePageState extends State<HomePage> {
       CheckboxStatus.insert(0, Colors.red);
       alarmcolor.length++;
       CheckboxStatus.length++;
+      focus = false;
+    });
+  }
+
+  void addEditedItemToList() {
+    setState(() {
+      message.insert(0, messagecontroller2.text);
+      message2.insert(0, messagecontroller2.text);
+      message3.insert(0, message3controller2.text);
+      message4.insert(0, message3controller2.text);
+      deadline.insert(0, datecontroller.text);
+      messagecontroller2.text = '';
+      message3controller2.text = '';
+      datecontroller2.text = '';
+      alarmcolor.insert(0, Colors.red);
+      CheckboxStatus.insert(0, Colors.red);
+      alarmcolor.length++;
+      CheckboxStatus.length++;
+      focus = false;
     });
   }
 
@@ -55,7 +80,136 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void Editdetails(int index) {}
+  void Editdetails(int index) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: Colors.deepPurple[100],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              title: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 60),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.pending_actions,
+                        color: Colors.deepPurple,
+                      ),
+                      Text(
+                        "Edit details",
+                        style: TextStyle(color: Colors.deepPurple),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextField(
+                    controller: messagecontroller2,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                    decoration: InputDecoration(
+                        labelText: "Title", hintText: message2[index]),
+                    readOnly: false,
+                  ),
+                  TextField(
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                    decoration: InputDecoration(
+                        labelText: "Discription",
+                        hintMaxLines: 3,
+                        hintText: message4[index]),
+                  ),
+                  TextField(
+                    controller: datecontroller2,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                    decoration: InputDecoration(
+                        labelText: "Date", hintText: deadline[index]),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 10.0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        RaisedButton(
+                          onPressed: () {
+                            print(index);
+                            if (messagecontroller2.text.isEmpty) {
+                              setState(() {
+                                message[index] = message2[index];
+                              });
+                            }
+                            if (message3controller2.text.isEmpty) {
+                              setState(() {
+                                message3[index] = message4[index];
+                              });
+                            }
+                            if (datecontroller2.text.isEmpty) {
+                              setState(() {
+                                deadline[index] = message2[index];
+                              });
+                            }
+                            addEditedItemToList();
+                            deleteItemfromList(index+1);
+                            Navigator.pop(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            );
+                          },
+                          color: Colors.deepPurple,
+                          child: Text("Update",
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              )),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        RaisedButton(
+                          onPressed: () {
+                            Navigator.pop(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            );
+                          },
+                          color: Colors.deepPurple,
+                          child: Text(" CANCEL .",
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              )),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+        });
+  }
 
   // List _mylist = <String>[];
   @override
@@ -72,16 +226,23 @@ class _HomePageState extends State<HomePage> {
               controller: messagecontroller,
               decoration: InputDecoration(
                   labelText: "Add Title", hintText: "Enter title "),
+              autofocus: true,
             ),
             TextField(
               controller: message3controller,
               decoration: InputDecoration(
-                  labelText: "Add Subtitle", hintText: "Enter subtitals"),
+                labelText: "Add Subtitle",
+                hintText: "Enter subtitals",
+              ),
+              autofocus: focus,
             ),
             TextField(
               controller: datecontroller,
               decoration: InputDecoration(
-                  labelText: "Deadline", hintText: "Enter date"),
+                labelText: "Deadline",
+                hintText: "Enter date",
+              ),
+              autofocus: false,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -92,6 +253,7 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       onPressed: () {
                         addItemToList();
+                        
                       },
                       icon: const Icon(Icons.add),
                     ),
@@ -163,8 +325,10 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 IconButton(
                                     onPressed: () {
+                                      print(index);
                                       setState(() {
                                         Editdetails(index);
+                                        // enableEdit = !enableEdit;
                                       });
                                     },
                                     icon: const Icon(Icons.edit)),
