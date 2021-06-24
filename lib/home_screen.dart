@@ -13,6 +13,7 @@ class _HomePageState extends State<HomePage> {
   final message3 = [];
   final message4 = [];
   final deadline = [];
+  final deadline2 = [];
   final alarmcolor = [];
   final CheckboxStatus = [];
 
@@ -45,6 +46,7 @@ class _HomePageState extends State<HomePage> {
       message3.insert(0, message3controller.text);
       message4.insert(0, message3controller.text);
       deadline.insert(0, datecontroller.text);
+      deadline2.insert(0, datecontroller.text);
       messagecontroller.text = '';
       message3controller.text = '';
       datecontroller.text = '';
@@ -62,7 +64,8 @@ class _HomePageState extends State<HomePage> {
       message2.insert(0, messagecontroller2.text);
       message3.insert(0, message3controller2.text);
       message4.insert(0, message3controller2.text);
-      deadline.insert(0, datecontroller.text);
+      deadline.insert(0, datecontroller2.text);
+      deadline2.insert(0, datecontroller2.text);
       messagecontroller2.text = '';
       message3controller2.text = '';
       datecontroller2.text = '';
@@ -116,17 +119,18 @@ class _HomePageState extends State<HomePage> {
                       fontSize: 18.0,
                     ),
                     decoration: InputDecoration(
-                        labelText: "Title", hintText: message2[index]),
+                        labelText: "Title", hintText: message[index]),
                     readOnly: false,
                   ),
                   TextField(
+                    controller: message3controller2,
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
                     decoration: InputDecoration(
                         labelText: "Discription",
                         hintMaxLines: 3,
-                        hintText: message4[index]),
+                        hintText: message3[index]),
                   ),
                   TextField(
                     controller: datecontroller2,
@@ -151,21 +155,25 @@ class _HomePageState extends State<HomePage> {
                             print(index);
                             if (messagecontroller2.text.isEmpty) {
                               setState(() {
-                                message[index] = message2[index];
+                                print(messagecontroller2.text);
+                                messagecontroller2.text = message2[index];
+                                print(messagecontroller2.text);
                               });
                             }
                             if (message3controller2.text.isEmpty) {
                               setState(() {
-                                message3[index] = message4[index];
+                                print(message3controller2.text);
+                                message3controller2.text = message4[index];
+                                print(message3controller2.text);
                               });
                             }
                             if (datecontroller2.text.isEmpty) {
                               setState(() {
-                                deadline[index] = message2[index];
+                                datecontroller2.text = message2[index];
                               });
                             }
                             addEditedItemToList();
-                            deleteItemfromList(index+1);
+                            deleteItemfromList(index + 1);
                             Navigator.pop(
                               context,
                               MaterialPageRoute(
@@ -253,7 +261,6 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       onPressed: () {
                         addItemToList();
-                        
                       },
                       icon: const Icon(Icons.add),
                     ),
