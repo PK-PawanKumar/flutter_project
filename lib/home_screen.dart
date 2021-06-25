@@ -275,7 +275,12 @@ class _HomePageState extends State<HomePage> {
                     Text("Add task"),
                     IconButton(
                       onPressed: () {
-                        addItemToList();
+                        if (titalcontroller.text.isEmpty) {
+                          print("tital cant be empty");
+                        }
+                        else{
+                          addItemToList();
+                        }
                       },
                       icon: const Icon(Icons.add),
                     ),
