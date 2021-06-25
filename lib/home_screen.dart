@@ -8,23 +8,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final message = [];
-  final message2 = [];
-  final message3 = [];
-  final message4 = [];
-  final deadline = [];
-  final deadline2 = [];
+  final originalTital = [];
+  final dublicateTital = [];
+  final originalDescription = [];
+  final dublicateDescription = [];
+  final originaldeadline = [];
+  final dublicateDeadline = [];
   final alarmcolor = [];
-  final CheckboxStatus = [];
+  final checkboxStatus = [];
 
-  final messagecontroller = TextEditingController();
-  final message3controller = TextEditingController();
+  final titalcontroller = TextEditingController();
+  final decriptioncontroller = TextEditingController();
   final datecontroller = TextEditingController();
-  final messagecontroller2 = TextEditingController();
-  final message3controller2 = TextEditingController();
-  final datecontroller2 = TextEditingController();
-  // ignore: prefer_final_fields
-  var _iconColor = Colors.red;
+  final editTitalcontroller = TextEditingController();
+  final editDecriptioncontroller = TextEditingController();
+  final editDateController = TextEditingController();
   bool focus = false;
   bool enableEdit = false;
 
@@ -34,52 +32,63 @@ class _HomePageState extends State<HomePage> {
       // alarmcolor.length = message.length + 1;
       for (int i = 0; i < alarmcolor.length; i++) {
         alarmcolor[i] = Colors.red;
-        CheckboxStatus[i] = Colors.red;
+        checkboxStatus[i] = Colors.red;
       }
     });
   }
 
   void addItemToList() {
     setState(() {
-      message.insert(0, messagecontroller.text);
-      message2.insert(0, messagecontroller.text);
-      message3.insert(0, message3controller.text);
-      message4.insert(0, message3controller.text);
-      deadline.insert(0, datecontroller.text);
-      deadline2.insert(0, datecontroller.text);
-      messagecontroller.text = '';
-      message3controller.text = '';
+      originalTital.insert(0, titalcontroller.text);
+      dublicateTital.insert(0, titalcontroller.text);
+      originalDescription.insert(0, decriptioncontroller.text);
+      dublicateDescription.insert(0, decriptioncontroller.text);
+      originaldeadline.insert(0, datecontroller.text);
+      dublicateDeadline.insert(0, datecontroller.text);
+      titalcontroller.text = '';
+      decriptioncontroller.text = '';
       datecontroller.text = '';
       alarmcolor.insert(0, Colors.red);
-      CheckboxStatus.insert(0, Colors.red);
+      checkboxStatus.insert(0, Colors.red);
       alarmcolor.length++;
-      CheckboxStatus.length++;
+      checkboxStatus.length++;
       focus = false;
+      int index2;
     });
   }
 
-  void addEditedItemToList() {
+  void addEditedItemToList(int index) {
+    print("edit $index");
     setState(() {
-      message.insert(0, messagecontroller2.text);
-      message2.insert(0, messagecontroller2.text);
-      message3.insert(0, message3controller2.text);
-      message4.insert(0, message3controller2.text);
-      deadline.insert(0, datecontroller2.text);
-      deadline2.insert(0, datecontroller2.text);
-      messagecontroller2.text = '';
-      message3controller2.text = '';
-      datecontroller2.text = '';
+      originalTital.insert(0, editTitalcontroller.text);
+      dublicateTital.insert(0, editTitalcontroller.text);
+      originalDescription.insert(0, editDecriptioncontroller.text);
+      dublicateDescription.insert(0, editDecriptioncontroller.text);
+      // originalDescription.removeAt(1);
+      dublicateDescription.insert(0, editDecriptioncontroller.text);
+      originaldeadline.insert(0, editDateController.text);
+      dublicateDeadline.insert(0, editDateController.text);
+      editTitalcontroller.text = originalTital[index];
+      editDecriptioncontroller.text = originalDescription[index];
+      editDateController.text = originaldeadline[index];
       alarmcolor.insert(0, Colors.red);
-      CheckboxStatus.insert(0, Colors.red);
+      checkboxStatus.insert(0, Colors.red);
       alarmcolor.length++;
-      CheckboxStatus.length++;
+      checkboxStatus.length++;
       focus = false;
     });
   }
 
   void deleteItemfromList(int index) {
     setState(() {
-      message.remove(message[index]);
+      originalTital.remove(originalTital[index]);
+      originalDescription.remove(originalDescription[index]);
+      originaldeadline.remove(originaldeadline[index]);
+      if (originalTital.length == 0) {
+        originalDescription.clear();
+        originalTital.clear();
+        originaldeadline.clear();
+      }
     });
   }
 
@@ -114,31 +123,32 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   TextField(
-                    controller: messagecontroller2,
+                    controller: editTitalcontroller,
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
                     decoration: InputDecoration(
-                        labelText: "Title", hintText: message[index]),
+                        labelText: "Title", hintText: originalTital[index]),
                     readOnly: false,
                   ),
                   TextField(
-                    controller: message3controller2,
+                    controller: editDecriptioncontroller,
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
                     decoration: InputDecoration(
                         labelText: "Discription",
                         hintMaxLines: 3,
-                        hintText: message3[index]),
+                        hintText: originalDescription[index]),
+                    readOnly: false,
                   ),
                   TextField(
-                    controller: datecontroller2,
+                    controller: editDateController,
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
                     decoration: InputDecoration(
-                        labelText: "Date", hintText: deadline[index]),
+                        labelText: "Date", hintText: originaldeadline[index]),
                   ),
                   SizedBox(
                     height: 20,
@@ -152,34 +162,39 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         RaisedButton(
                           onPressed: () {
-                            print(index);
-                            if (messagecontroller2.text.isEmpty) {
-                              setState(() {
-                                print(messagecontroller2.text);
-                                messagecontroller2.text = message2[index];
-                                print(messagecontroller2.text);
-                              });
-                            }
-                            if (message3controller2.text.isEmpty) {
-                              setState(() {
-                                print(message3controller2.text);
-                                message3controller2.text = message4[index];
-                                print(message3controller2.text);
-                              });
-                            }
-                            if (datecontroller2.text.isEmpty) {
-                              setState(() {
-                                datecontroller2.text = message2[index];
-                              });
-                            }
-                            addEditedItemToList();
-                            deleteItemfromList(index + 1);
-                            Navigator.pop(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              ),
-                            );
+                            setState(() {
+                              print(index);
+                              if (editTitalcontroller.text.isEmpty) {
+                                // setState(() {
+                                // print(editTitalcontroller.text);
+                                editTitalcontroller.text =
+                                    dublicateTital[index];
+                                // print(editTitalcontroller.text);
+                                // });
+                              }
+                              if (editDecriptioncontroller.text.isEmpty) {
+                                // setState(() {
+                                // print(editDecriptioncontroller.text);
+                                editDecriptioncontroller.text =
+                                    dublicateDescription[index];
+                                // print(editDecriptioncontroller.text);
+                                // });
+                              }
+                              if (editDateController.text.isEmpty) {
+                                // setState(() {
+                                editDateController.text = dublicateTital[index];
+                                // });
+                              }
+                              // deleteItemfromList(index);
+                              addEditedItemToList(index);
+                              deleteItemfromList(index + 1);
+                              Navigator.pop(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ),
+                              );
+                            });
                           },
                           color: Colors.deepPurple,
                           child: Text("Update",
@@ -231,13 +246,13 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             TextField(
-              controller: messagecontroller,
+              controller: titalcontroller,
               decoration: InputDecoration(
                   labelText: "Add Title", hintText: "Enter title "),
               autofocus: true,
             ),
             TextField(
-              controller: message3controller,
+              controller: decriptioncontroller,
               decoration: InputDecoration(
                 labelText: "Add Subtitle",
                 hintText: "Enter subtitals",
@@ -273,7 +288,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: message.length,
+                itemCount: originalTital.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding:
@@ -292,7 +307,7 @@ class _HomePageState extends State<HomePage> {
                             title: Row(
                               children: [
                                 Text(
-                                  message[index],
+                                  originalTital[index],
                                   style: TextStyle(
                                     color: Colors.red,
                                     fontWeight: FontWeight.bold,
@@ -311,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 Text(
-                                  deadline[index],
+                                  originaldeadline[index],
                                   style: TextStyle(
                                     color: Colors.blue,
                                     fontWeight: FontWeight.bold,
@@ -320,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                             subtitle: Text(
-                              message3[index],
+                              originalDescription[index],
                               style: TextStyle(
                                 color: Colors.red,
                               ),
@@ -332,27 +347,41 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 IconButton(
                                     onPressed: () {
-                                      print(index);
+                                      editTitalcontroller.text =
+                                          originalTital[index];
+                                      print("editing index: $index");
+                                      // print(editTitalcontroller.text);
                                       setState(() {
+                                        editTitalcontroller.text =
+                                            originalTital[index];
+                                        editDecriptioncontroller.text =
+                                            originalDescription[index];
+                                        editDateController.text =
+                                            originaldeadline[index];
+                                        // print("editing index: $index");
+                                        // print(messagecontroller2.text);
+                                        for (int i = 0;
+                                            i < originalTital.length;
+                                            i++) {
+                                          print("tital: : $originalTital");
+                                          print(
+                                              "decription: : $originalDescription");
+                                          print("Date: : $originaldeadline");
+                                        }
                                         Editdetails(index);
                                         // enableEdit = !enableEdit;
                                       });
                                     },
                                     icon: const Icon(Icons.edit)),
-                                // IconButton(
-                                //     onPressed: () {
-                                //       setState(() {
-                                //         message[index] = message2[index];
-                                //         message3[index] = message4[index];
-                                //       });
-                                //     },
-                                //     icon: const Icon(Icons.refresh,
-                                //         color: Colors.blue)),
                                 IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      message[index] = 'deleted';
-                                      message3[index] = '';
+                                      // editDecriptioncontroller.text =
+                                      //     originalDescription[index];
+                                      // print(editDecriptioncontroller.text);
+                                      // originalTital[index] = 'deleted';
+                                      // originalDescription[index] = '';
+
                                       deleteItemfromList(index);
                                     });
                                   },
@@ -362,6 +391,9 @@ class _HomePageState extends State<HomePage> {
                                 IconButton(
                                   onPressed: () {
                                     setState(() {
+                                      editDateController.text =
+                                          dublicateDeadline[index];
+                                      print(editDateController.text);
                                       if (alarmcolor[index] == Colors.red) {
                                         alarmcolor[index] = Colors.green;
                                       } else {
@@ -378,16 +410,16 @@ class _HomePageState extends State<HomePage> {
                                 IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      if (CheckboxStatus[index] == Colors.red) {
-                                        CheckboxStatus[index] = Colors.green;
+                                      if (checkboxStatus[index] == Colors.red) {
+                                        checkboxStatus[index] = Colors.green;
                                       } else {
-                                        CheckboxStatus[index] = Colors.red;
+                                        checkboxStatus[index] = Colors.red;
                                       }
                                     });
                                   },
                                   icon: Icon(
                                     Icons.check_box,
-                                    color: CheckboxStatus[index],
+                                    color: checkboxStatus[index],
                                     size: 30,
                                   ),
                                 ),
